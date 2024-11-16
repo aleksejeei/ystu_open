@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сервис управления задачами</title>
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">-->
+    <style>
+        body {
+            background-color: #1e1e1e;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+        }
+        .sidebar {
+            width: 250px;
+            padding: 20px;
+            background-color: #2a2a2a;
+        }
+        .tasks {
+            flex-grow: 1;
+            padding: 20px;
+        }
+        .team, .task {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .team:hover, .task:hover {
+            opacity: 0.8;
+        }
+        .overdue {
+            background-color: #8B0000; /* Темно-красный для просроченных задач */
+        }
+        .completed {
+            background-color: #006400; /* Темно-зеленый для завершенных задач */
+        }
+        .active {
+            background-color: #444444; /* Серый для активных задач */
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #2a2a2a;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            border-radius: 5px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        button {
+            background-color: #444444;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #555555;
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <h2>Команды</h2>
+    {% for i in chats %}
+    <div class="team" onclick="location.href='{% url 'view_chat' %}?id={{i.1}}'">{{i.0}}</div>
+    {% endfor %}
+    <!-- <div class="team">Команда A</div>
+    <div class="team">Команда B</div>
+    <div class="team">Команда C</div> -->
+    <button id="createTeamBtn">Создать команду</button>
+</div>
+
+<div class="tasks">
+    <h2>Задачи</h2>
+    <button id="addTaskBtn">Добавить новую задачу</button>
+
+    <h3>Активные задачи</h3>
+    <div class="task active" onclick="openCloseModal('Задача 1', 'Техническое задание для задачи 1', 'Заказчик 1', '2023-10-15T14:30')">
+        <strong>Задача 1</strong><br>
+        Срок сдачи: 2023-10-15 14:30<br>
+        Тип результата: Отчет<br>
+        Заказчик: Заказчик 1
+    </div>
+
+    <h3>Просроченные задачи</h3>
+    <div class="task overdue">
+        <strong>Задача 2</strong><br>
+        Срок сдачи: 2023-09-30 12:00<br>
+        Тип результата: Презентация<br>
+        Заказчик: Заказчик 2
+    </div>
+
+    <h3>Выполненные задачи</h3>
+    <div class="task completed">
+        <strong>Задача 3</strong><br>
+        Срок сдачи: 2023-09-25 10:00<br>
+        Тип результата: Отчет<br>
+        Заказчик: Заказчик 3
+    </div>
+</div>
+
+<!-- Модальное окно для закрытия задачи -->
+<div id="closeTaskModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2 id="taskTitle"></h2>
+        <p id="taskDescription"></p>
+        <p id="taskCustomer"></p>
+        <p id="taskDeadline"></p>
+        <label for="reportUpload">Прикрепить отчет:</label><br>
+        <input type="file" id="reportUpload"><br><br>
+        <button onclick="closeModal()">Закрыть задачу</button>
+    </div>
+</div>
+
+<!-- Модальное окно для добавления новой задачи -->
+<div id="addTaskModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeAddTaskModal()">&times;</span>
+        <h2>Добавить новую задачу</h2>
+
+        <label for="newTaskName">Название задачи:</label><br>
+        <input type="text" id="newTaskName"><br><br>
+
+        <label for="newTaskDescription">Техническое задание:</label><br>
+        <textarea id="newTaskDescription"></textarea><br><br>
+
+        <label for="newTaskDeadline">Срок сдачи:</label><br>
+        <input type="datetime-local" id="newTaskDeadline"><br><br>
+
+        <label for="newTaskType">Тип результата:</label><br>
+        <input type="text" id="newTaskType"><br><br>
+
+        <label for="newTaskCustomer">Заказчик:</label><br>
+        <input type="text" id="newTaskCustomerName"><br><br>
+
+        <button onclick="addTask()">Добавить задачу</button>
+    </div>
+</div>
+
+<script>
+    function openCloseModal(taskTitle, taskDescription, taskCustomer, taskDeadline) {
+        document.getElementById('taskTitle').innerText = taskTitle;
+        document.getElementById('taskDescription').innerText = taskDescription;
+        document.getElementById('taskCustomer').innerText = 'Заказчик: ' + taskCustomer;
+        document.getElementById('taskDeadline').innerText = 'Срок сдачи: ' + taskDeadline.replace('T', ' ');
+        document.getElementById('closeTaskModal').style.display = "block";
+    }
+
+    function closeModal() {
+        document.getElementById('closeTaskModal').style.display = "none";
+    }
+
+    document.getElementById('addTaskBtn').onclick = function() {
+        document.getElementById('addTaskModal').style.display = "block";
+    };
+
+    function closeAddTaskModal() {
+        document.getElementById('addTaskModal').style.display = "none";
+    }
+
+    function addTask() {
+        const taskName = document.getElementById('newTaskName').value;
+        const taskDescription = document.getElementById('newTaskDescription').value;
+        const taskDeadline = document.getElementById('newTaskDeadline').value.replace('T', ' ');
+        const taskType = document.getElementById('newTaskType').value;
+        const taskCustomer = document.getElementById('newTaskCustomerName').value;
+
+        // Здесь можно добавить логику для добавления задачи
+
+        closeAddTaskModal();
+    }
+
+    window.onclick = function(event) {
+        if (event.target === document.getElementById('closeTaskModal')) {
+            closeModal();
+        }
+        if (event.target === document.getElementById('addTaskModal')) {
+            closeAddTaskModal();
+        }
+    };
+</script>
+
+</body>
+</html>

@@ -1,0 +1,48 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Расписание на неделю</title>
+    <link rel="stylesheet" href="{% static 'schedule/css/schedule.css' %}">
+
+</head>
+<body>
+
+
+<h1>Расписание на неделю</h1>
+<a href="{% url 'home' %}" class="home-button">Главная страница</a>
+<div id="calendar" class="calendar">
+
+    <div class="day">
+
+    </div>
+
+
+    <div class="day">
+
+    </div>
+
+    <div class="day">
+
+    </div>
+
+    <div class="day">
+
+    </div>
+
+</div>
+<button class="next-week-button" onclick="beforeWeek();">На прошлую неделю</button>
+<button class="next-week-button" onclick="nextWeek();">Перейти на следующую неделю</button>
+
+
+<script src="{% static 'schedule/js/get.js' %}"></script>
+<script>
+    const numberWeek = {{ numberWeek }};
+</script>
+
+
+</body>
+</html>

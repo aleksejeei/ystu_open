@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мессенджер</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212; /* Темный фон */
+            color: #ffffff; /* Белый текст */
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: #1e1e1e; /* Светлее темный фон для контейнера */
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+        .header {
+            background-color: #bb86fc; /* Цвет заголовка */
+            color: white;
+            padding: 15px;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+        }
+        .chat-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .chat-item {
+            padding: 15px;
+            border-bottom: 1px solid #333; /* Линия между чатами */
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .chat-item:hover {
+            background-color: #333; /* Цвет при наведении */
+        }
+        .chat-item:last-child {
+            border-bottom: none; /* Убираем нижнюю границу у последнего элемента */
+        }
+        .create-chat-btn {
+            display: block;
+            margin: 20px auto; /* Центрирование кнопки */
+            padding: 10px 20px;
+            background-color: #bb86fc; /* Цвет кнопки */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 16px;
+        }
+        .create-chat-btn:hover {
+            background-color: #a76fcf; /* Цвет при наведении на кнопку */
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>Чаты</h1>
+    </div>
+    <ul class="chat-list">
+        {% for i in chats %}
+        <li class="chat-item" onclick="location.href='{% url 'view_chat' %}?id={{i.1}}'">{{i.0}}</li>
+        {% endfor %}
+    </ul>
+    <button class="create-chat-btn" onclick="createChat()">Создать чат или группу</button>
+</div>
+
+<script>
+    function createChat() {
+        // Здесь вы можете добавить логику для создания нового чата
+        alert("Создание нового чата или группы...");
+        // Например, можно перенаправить на страницу создания чата:
+        // location.href = 'createChat.html';
+    }
+</script>
+
+</body>
+</html>

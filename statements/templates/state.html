@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список отправленных заявок</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #ffffff;
+        }
+        .header {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        .home-button {
+            padding: 10px 20px;
+            background-color: #007aff;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .order-button {
+            padding: 2px 8px;
+            background-color: #007aff;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .home-button:hover {
+            background-color: #005bb5;
+        }
+        .application-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+        }
+        .application-card {
+            background-color: #1e1e1e;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            transition: transform 0.2s;
+        }
+        .application-card:hover {
+            transform: scale(1.02);
+        }
+        .application-title {
+            font-weight: bold;
+            font-size: 18px;
+            color: #007aff;
+        }
+        .application-status {
+            margin-top: 5px;
+            font-size: 14px;
+        }
+        .application-details {
+            margin-top: 10px;
+            font-size: 12px;
+            color: #d1d1d6;
+        }
+
+        .delete-btn {
+            border-radius: 5px;
+            color: white;
+            background-color: red;
+            cursor: pointer;
+            border: none;
+        }
+
+        .date {
+            margin-top: 5px;
+            font-size: 12px;
+            text-align: right;
+            color: #a1a1a6;
+        }
+
+        @media (max-width: 600px) {
+            .home-button {
+                width: 100%;
+                margin-bottom: 20px;
+                text-align: center;
+            }
+        }
+
+        /* Модальное окно */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #1e1e1e;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 500px;
+            line-height: 30px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="header">
+
+    <a id="addRequestBtn" class="home-button">Добавить заявку</a>
+
+    <a href="{% url 'home' %}" class="home-button">Главная страница</a>
+
+</div>
+
+<h1>Список отправленных заявок</h1>
+
+<div class="application-list">
+    {% for i in info %}
+    <div class="application-card">
+        <div class="application-title">{{ i.type }}</div>
+        <div class="application-status">Статус: {{ i.status }}</div>
+        <div class="application-details">Номер: {{ i.number }}<br>Отдел: {{ i.department }}</div>
+        <div class="date">Дата: {{ i.date }}</div>
+        <!--
+        {% if i.status == "" %}
+        <form action="" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="number_order" value="{{ i.number }}">
+        <button type="submit" class="delete-btn">Удалить</button>
+        </form>
+        {% endif %}
+        -->
+    </div>
+    {% endfor %}
+
+</div>
+
+<!-- Модальное окно для добавления заявки -->
+<div id="requestModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Доступные заявки</h2>
+
+        <div class="available-request">
+            <form action="{% url 'order' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="requestName" value="place_request">
+            <span>Справка по месту требования</span>
+
+            <button type="submit" class="order-button">Заказать</button>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    var modal = document.getElementById("requestModal");
+    var btn = document.getElementById("addRequestBtn");
+    var span = document.getElementsByClassName("close")[0];
+
+    btn.onclick = function() {
+        modal.style.display = "block";
+    }
+
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
+
+
+<script>
+    function showLoader() {
+        document.getElementById('loader').style.display = 'flex';
+        setTimeout(function() {
+            document.getElementById('loader').style.display = 'none';
+        }, 10000);
+    }
+</script>
+
+</body>
+</html>

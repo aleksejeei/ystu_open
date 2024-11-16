@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <link rel="manifest" href="{% static 'manifest.json' %}">
+    <title>Форма отправки данных</title>
+    <link rel="stylesheet" href="{% static 'common/css/login.css' %}">
+
+</head>
+<body>
+<div id="loader"></div>
+    <img src="{% static 'common/logo/logo.png' %}" width="15%" align="center" hspace="43%" vspace="3%" />
+    <div class="container">
+        <h1>Вход</h1>
+        <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+            <input type="text" name="username" placeholder="Логин" required id="id_username">
+            <input type="password" name="password" autocomplete="current-password" placeholder="Пароль" required id="id_password">
+
+<button type="submit" value="login" />Вход</button>
+<input type="hidden" name="next" value="{{ next }}" />
+</form>
+        <a href="{% url 'registration' %}" class="register-link">Нет аккаунта? Зарегистрируйтесь</a>
+    </div>
+<script>
+       if ('serviceWorker' in navigator) {
+           navigator.serviceWorker.register('{% url "sw" %}', { scope: '/' }).then(function(reg) {
+               // registration worked
+               console.log('Registration succeeded. Scope is ' + reg.scope);
+           }).catch(function(error) {
+               // registration failed
+               console.log('Registration failed with ' + error);
+           });
+       }
+   </script>
+
+</body>
+</html>

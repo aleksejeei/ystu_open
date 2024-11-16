@@ -1,0 +1,110 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <link rel="manifest" href="{% static 'manifest.json' %}">
+    <title>Регистрация</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #1c1c1e;
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: #2c2c2e;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #ffffff;
+        }
+        input[type="text"], input[type="password"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .login-link, .login-ystu {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .login-link:hover {
+            text-decoration: underline;
+        }
+        .error {
+            color: red;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div id="loader"></div>
+    <img src="{% static 'common/logo/logo.png' %}" width="15%" align="center" hspace="43%" vspace="3%" />
+    <div class="container">
+        <h1>Регистрация</h1>
+        <form id="registrationForm" method="post" action="{% url 'register' %}">
+        {% csrf_token %}
+            <input type="text" name="username" placeholder="Имя пользователя" required id="id_username">
+            <input type="password" name="password" autocomplete="new-password" placeholder="Пароль" required id="id_password">
+            <input type="password" name="confirm_password" autocomplete="new-password" placeholder="Подтверждение пароля" required id="id_confirm_password">
+
+            <b class="login-ystu">Укажите данные с портала ЯГТУ</b>
+            <input type="text" name="username-ystu" placeholder="Логин" required id="id_login">
+            <input type="password" name="password-ystu" autocomplete="current-password" placeholder="Пароль" required id="id_passwordystu">
+
+            <div class="error" id="error-message"></div>
+
+
+
+            <button type="submit">Зарегистрироваться</button>
+        </form>
+        <a href="{% url 'login' %}" class="login-link">Уже есть аккаунт? Войдите</a>
+    </div>
+<script>
+    document.getElementById('registrationForm').addEventListener('submit', function(event) {
+        const password = document.getElementById('id_password').value;
+        const confirmPassword = document.getElementById('id_confirm_password').value;
+
+        if (password !== confirmPassword) {
+            event.preventDefault(); // Отменяем отправку формы
+            document.getElementById('error-message').textContent = 'Пароли не совпадают!';
+        } else {
+            document.getElementById('error-message').textContent = ''; // Очищаем сообщение об ошибке
+        }
+    });
+
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('{% url "sw" %}', { scope: '/' }).then(function(reg) {
+            console.log('Registration succeeded. Scope is ' + reg.scope);
+        }).catch(function(error) {
+            console.log('Registration failed with ' + error);
+        });
+    }
+</script>
+
+</body>
+</html>

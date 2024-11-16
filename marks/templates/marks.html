@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оценки</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #1e1e1e;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+        .semester {
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #333;
+        }
+        .course {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #2a2a2a;
+            transition: background-color 0.3s;
+        }
+        .course:hover {
+            background-color: #3a3a3a;
+        }
+        .control-type {
+            font-weight: bold;
+            color: #ffcc00; /* Цвет для вида контроля */
+        }
+        button {
+            display: block;
+            margin: 20px auto;
+            padding: 12px 25px;
+            background-color: #6200ea;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        button:hover {
+            background-color: #3700b3;
+            transform: scale(1.05);
+        }
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            button {
+                width: 100%;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Оценки по семестрам</h1>
+
+        {% for i in list_sem %}
+        <div class="semester">
+            <h2>Семестр {{ i }}</h2>
+
+            {% for x in marks %}
+            {% if x.type_exam == 'зачет' %}
+            <div class="course">{{ x.subject }} - <strong>{{ x.mark_word }}</strong><span class="control-type"> ({{ x.type_exam }})</span></div>
+            {% else %}
+            <div class="course">{{ x.subject }} - <strong>{{ x.mark }}</strong><span class="control-type"> ({{ x.type_exam }})</span></div>
+            {% endif %}
+            {% endfor %}
+
+
+        </div>
+        {% endfor %}
+
+
+        <button onclick="location.href='{% url 'home' %}'">На главную</button>
+    </div>
+
+</body>
+</html>

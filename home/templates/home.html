@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="{% static 'manifest.json' %}">
+    <title>Профиль студента</title>
+    <link rel="stylesheet" href="{% static 'home/css/home.css' %}">
+</head>
+<body>
+<div id="loader"></div>
+{% if superuser == "True" %}
+<a href="/admin/" class="admin-panel">Панель администратора</a>
+{% endif %}
+<div class="container">
+    <h1>Профиль студента</h1>
+    <img src="{{ file }}" alt="Фото студента" class="profile-photo">
+    <div class="info">
+        <p><strong>ФИО:</strong> {{ full_name }}</p>
+        <p><strong>Группа:</strong> {{ group }}</p>
+        <p><strong>Направление подготовки:</strong> {{ direction_name }}</p>
+        <p><strong>Имя пользователя:</strong> {{ username }}</p>
+    </div>
+    <div class="buttons">
+        <a href="{% url 'schedule' %}" class="button" onclick="showLoader()">Расписание</a>
+        <a href="{% url 'statements' %}" class="button" onclick="showLoader()">Заявки</a>
+        <a href="{% url 'marks' %}" class="button" onclick="showLoader()">Оценки</a>
+        <a href="{% url 'settings' %}" class="button" onclick="showLoader()">Настройки</a>
+
+
+
+    </div>
+    {% if beta == 'True' %}
+    <div>
+        <a href="{% url 'chats' %}" class="button" onclick="showLoader()">Делегирование</a>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+       if ('serviceWorker' in navigator) {
+           navigator.serviceWorker.register('{% url "sw" %}', { scope: '/home/' }).then(function(reg) {
+               // registration worked
+               console.log('Registration succeeded. Scope is ' + reg.scope);
+           }).catch(function(error) {
+               // registration failed
+               console.log('Registration failed with ' + error);
+           });
+       }
+</script>
+
+<script src="{% static 'common/js/preloader.js' %}"></script>
+
+</body>
+</html>

@@ -1,0 +1,172 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Чат в мессенджере</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .chat-container {
+            display: flex;
+
+            max-width: 600px;
+            margin: auto;
+            height: 80vh;
+            overflow-y: auto;
+            border-radius: 10px;
+            border: 1px solid #444;
+            padding: 10px;
+            flex-direction: column;
+
+        }
+
+
+
+
+        .chat-container::-webkit-scrollbar {
+    width: 10px; /* Ширина скроллбара */
+}
+
+.chat-container::-webkit-scrollbar-track {
+    background: black; /* Цвет фона трека */
+    border-radius: 5px;
+}
+
+.chat-container::-webkit-scrollbar-thumb {
+    background: black; /* Цвет ползунка */
+    border-radius: 5px;
+}
+
+.chat-container::-webkit-scrollbar-thumb:hover {
+    background: black; /* Цвет ползунка при наведении */
+}
+
+/* Кастомизация скроллбара для Firefox */
+.chat-container {
+    scrollbar-width: thin; /* Устанавливаем ширину скроллбара */
+    scrollbar-color: black grey; /* Цвет ползунка и фона трека */
+}
+
+
+
+
+
+
+        .chat-js {
+        display: flex;
+        flex-direction: column;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 10px;
+            position: relative;
+            clear: both;
+        }
+        .my-message {
+            background-color: #007bff;
+            color: white;
+            align-self: flex-end;
+            text-align: left;
+            width: fit-content;
+            max-width: 80%;
+        }
+        .other-message {
+            background-color: #444;
+            color: white;
+            align-self: flex-start;
+            text-align: left;
+            width: fit-content;
+            max-width: 80%;
+        }
+        .sender {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .timestamp {
+            font-size: 0.8em;
+            color: #bbb;
+            text-align: right;
+        }
+        .input-container {
+
+            display: flex;
+            margin-top: auto;
+        }
+        .input-container input {
+            flex-grow: 1;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #444;
+            background-color: #222;
+            color: white;
+
+        }
+        .input-container button {
+            padding: 10px 15px;
+            border-radius: 10px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .chat-title {
+            text-align: center;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="chat-title">{{ chat_name }}</div>
+<div class="chat-container" id="scroll">
+<div id="chat-container" class="chat-js">
+    <!--
+    <div class="message my-message">
+        <div class="sender">Я</div>
+        <div>Привет! Как дела?</div>
+        <div class="timestamp">12:00</div>
+    </div>
+
+    <div class="message other-message">
+        <div class="sender">Друг</div>
+        <div>Привет! Всё отлично, а у тебя?</div>
+        <div class="timestamp">12:01</div>
+    </div>
+    <div class="message my-message">
+        <div class="sender">Я</div>
+        <div>Тоже хорошо, спасибо!</div>
+        <div class="timestamp">12:02</div>
+    </div> -->
+</div>
+    <div class="input-container" onload="test();">
+    <input id="message" type="text" placeholder="Введите сообщение...">
+    <button id="send-message" onclick="send_message();" style="display: none;">Отправить</button>
+</div>
+    <!-- Добавьте больше сообщений по необходимости -->
+</div>
+
+<script src="{% static 'messenger/js/update_chat.js' %}"></script>
+
+<script src="{% static 'messenger/js/check_input.js' %}"></script>
+
+<script src="{% static 'messenger/js/listener.js' %}"></script>
+
+
+
+
+
+</body>
+</html>

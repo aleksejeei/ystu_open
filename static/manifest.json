@@ -1,0 +1,22 @@
+{
+    "name": "YSTU",
+    "short_name": "YSTU",
+    "start_url": "/home/",
+    "scope": "/",
+    "display": "fullscreen",
+    "background_color": "#121212",
+    "theme_color": "#121212",
+    "description": "YSTU PWA TEST",
+    "dir": "ltr",
+    "lang": "en-US",
+    "orientation": "portrait-primary",
+    "icons": [{
+        "src": "/static/common/icons/logotype-big.png",
+        "type": "image/png",
+        "sizes": "96x96"
+    }, {
+        "src": "/static/common/icons/logotype-big.png",
+        "type": "image/png",
+        "sizes": "512x512"
+    }]
+}
